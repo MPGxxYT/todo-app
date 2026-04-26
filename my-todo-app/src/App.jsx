@@ -41,7 +41,7 @@ function App() {
     } else if (filterValue == "Active" && todoObject.completed == false) {
       return todoObject;
     }
-  }).map(todoObject => 
+  }).map((todoObject, index) => 
     <TodoItem 
     key={todoObject.id} 
     todoObject={todoObject} 
@@ -52,6 +52,7 @@ function App() {
     submitEdit={submitEdit}
     editingValue={editingValue}
     setEditingValue={setEditingValue}
+    colorDiff={index  % 2 == 0}
     />
   );
 

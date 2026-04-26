@@ -4,14 +4,15 @@
 :root {
 
   /** COLORS **/
-  --color-primary: #619cff;
-  --color-accent: #d09000;
+  --color-primary: #f3bcbc;
+  --color-accent: #f8ecec;
   --color-neutral: #6b727e;
-  --color-bg: #f8fafd;
-  --color-fg: #04070e;
-  --color-surface: #f8fafd;
-  --color-border: #e4e6ea;
-  --color-primary-300: #8bb8ff;
+  --color-bg: #DC9B9B;
+  --color-fg: #040911;
+  --color-surface: #E5EEE4;
+  --color-border: #dbbdbd;
+  --color-light: #f7f7f7;
+  --color-lighter: #e3afaf;
 
   /* Borders */
   --border-thin: 1px;
@@ -24,8 +25,8 @@
   --font-body: "Noto Sans Mono", ui-sans-serif, system-ui, sans-serif;
   --leading-base: 1.5;
   --leading-tight: 1.2;
-  --weight-heading: 600;
-  --weight-body: 400;
+  --weight-heading: 800;
+  --weight-body: 600;
   --text-xs: 10.24px;
   --text-sm: 12.8px;
   --text-base: 16px;
@@ -57,6 +58,9 @@
 
 body {
   background-color: var(--color-bg);
+}
+
+body p, button{
   font-family: var(--font-body);
   font-size: var(--text-base);
   font-weight: var(--weight-body);
@@ -75,7 +79,8 @@ p {
   border-radius: var(--radius-md);
   background-color: var(--color-surface);
   color: var(--color-surface);
-  min-height: 250px;
+  min-width: calc(100% - var(--space-3)*2);
+  min-height: calc(100vh - var(--space-3)*2);
 }
 
 .header {
@@ -118,7 +123,7 @@ p {
 .filter-buttons button {
   margin: 0px 1px;
   padding: var(--space-2) 0px;
-  background-color: transparent;
+  background-color: var(--color-light);
   min-width: 100px;
   border: solid var(--border-thin) var(--color-border);
   border-radius: 0px;
@@ -136,7 +141,7 @@ p {
 }
 
 .filter-buttons button:hover {
-  background-color: var(--color-primary-300);
+  background-color: var(--color-accent);
 }
 
 .filter-buttons .selected-filter {
@@ -155,6 +160,7 @@ p {
   border: var(--border-thin) solid var(--color-border);
   border-radius: var(--radius-md);
   padding: var(--space-3);
+  background-color: var(--color-light);
 }
 
 .input-section input:focus {
@@ -171,7 +177,7 @@ p {
   
   border: var(--border-thin) solid var(--color-border);
   color: var(--color-fg);
-  background-color: var(--color-surface);
+  background-color: var(--color-primary);
 }
 
 .input-section button:hover {
@@ -191,51 +197,30 @@ main ul {
 }
 
 .todo-objects li {
-  flex: 1;
-  margin: 5px 0px;
-  border-bottom: solid var(--border-thin) var(--color-border);
- }
-
-.todo-objects li:first-child { 
-  border-top: solid var(--border-thin) var(--color-border);
-  border-top-left-radius: var(--radius-md);
-  border-top-right-radius: var(--radius-md);
-}
-
-
-.todo-objects li:last-child {
-  border-bottom: none;
-  border-radius: 5px;
-  border-bottom: solid var(--border-thin) var(--color-border);
-  border-bottom-left-radius: var(--radius-md);
-  border-bottom-right-radius: var(--radius-md);
- }
-
-.todo-objects div { 
   display: flex;
-  padding: 5px 10px 5px 10px;
 }
 
-.todo-objects p {
-  flex: 1;
-  margin: 0;
+.todo-objects li p{
+  margin-left: 1rem;
 }
 
-.todo-objects button {
-  text-align: center;
-  flex: 0.03;
-  border: 0;
+.todo-objects li button{
+  flex: 0.05;
+  margin: var(--space-4);
+
+  border-radius: var(--radius-md);
+  border: var(--border-thin) solid --color-border;
   background-color: transparent;
 }
 
-.todo-objects button:hover {
-  text-align: center;
-  flex: 0.03;
+.todo-objects li button:first-of-type{
+  margin-left: auto;
+}
 
-  background-color: var(--color-primary);
-  color: var(--color-surface);
-  border: 0;
-  border-radius: var(--radius-md);
+.todo-objects li button:hover{
+  box-shadow: 2px 2px 1px var(--color-neutral),
+  inset 1px 1px 1px var(--color-surface);
+  border: var(--border-thin) solid --color-border;
 }
 
 .content-box {
@@ -261,6 +246,11 @@ main ul {
 
 .task-active {
   background-color: var(--color-primary);
+}
+
+
+.task-active.lighter {
+  background-color: var(--color-lighter);
 }
 
 .task-editing {

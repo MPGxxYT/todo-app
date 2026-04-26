@@ -3,13 +3,13 @@ import { useRef, useEffect } from 'react';
 
 export default function TodoItem(
     {todoObject, handleCompletion, handleDelete, editingTodo, 
-    setEditingTodo, submitEdit, editingValue, setEditingValue}) {
+    setEditingTodo, submitEdit, editingValue, setEditingValue, colorDiff}) {
 
     const inputRef = useRef(null);
     var itemHTML;
     if (editingTodo != todoObject.id) {
         itemHTML = (
-            <div className={todoObject.completed ? 'task-completed' : 'task-active'}
+            <li className={`todo-item ${todoObject.completed ? 'task-completed' : 'task-active'} ${colorDiff ? 'lighter' : ''}`}
                 onDoubleClick={() => {
                     setEditingTodo(todoObject.id)
                     setEditingValue(todoObject.text)
@@ -20,11 +20,11 @@ export default function TodoItem(
                 </p>
                 <button onClick={() => handleCompletion(todoObject.id)}>✓</button>
                 <button onClick={() => handleDelete(todoObject.id)}>X</button>
-            </div>
+            </li>
         )
     } else {
         itemHTML = (
-            <div className="task-active" >
+            <li className="todo-item task-active" >
                 <input 
                     ref={inputRef}
                     onInput={(event) => setEditingValue(event.target.value)}
@@ -39,7 +39,7 @@ export default function TodoItem(
                     }}
                     onBlur = {(event) => submitEdit(todoObject.id, event.target.value)}
                 />
-            </div>
+            </li>
         )
     }
 
@@ -50,8 +50,8 @@ export default function TodoItem(
     }, [editingTodo, todoObject.id])
 
     return (
-        <li className='todo-item'>
+        <>
             {itemHTML}
-        </li>
+        </>
     )
 }
