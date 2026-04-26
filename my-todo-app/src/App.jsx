@@ -126,7 +126,8 @@ function App() {
   }
 
   function getPlaceholderText() {
-    if (renderedTodoObjects == null) {
+    console.log(renderedTodoObjects.length)
+    if (renderedTodoObjects.length > 0) {
       return '';
     }
     switch (filterValue) {
