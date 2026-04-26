@@ -1,12 +1,13 @@
 
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 
 export default function TodoItem(
-    {todoObject, handleCompletion, handleDelete, editingTodo, 
-    setEditingTodo, submitEdit, editingValue, setEditingValue, colorDiff}) {
+    {todoObject, handleCompletion, handleDelete, submitEdit, colorDiff}) {
 
+    const [editingTodo, setEditingTodo] = useState(null)
+    const [editingValue, setEditingValue] = useState("")
     const inputRef = useRef(null);
-    var itemHTML;
+    let itemHTML;
     if (editingTodo != todoObject.id) {
         itemHTML = (
             <li className={`todo-item ${todoObject.completed ? 'task-completed' : 'task-active'} ${colorDiff ? 'lighter' : ''}`}
@@ -24,20 +25,25 @@ export default function TodoItem(
         )
     } else {
         itemHTML = (
-            <li className="todo-item task-active" >
-                <input 
+            <li className={`todo-item ${todoObject.completed ? 'task-completed' : 'task-active'} ${colorDiff ? 'lighter' : ''}`}>
+                <textarea 
                     ref={inputRef}
                     onInput={(event) => setEditingValue(event.target.value)}
                     className='task-editing'
                     value={editingValue} 
+                    rows={editingValue.split("\n").length + 4}
                     onKeyDown = {(event) => {
-                        if (event.key === "Enter") {
+                        if (event.key === "Enter" && event.ctrlKey) {
                             submitEdit(todoObject.id, event.target.value)
+                            setEditingTodo()
                         } else if (event.key === "Escape") {
                             setEditingTodo()
                         }
                     }}
-                    onBlur = {(event) => submitEdit(todoObject.id, event.target.value)}
+                    onBlur = {(event) => {
+                        submitEdit(todoObject.id, event.target.value)
+                        setEditingTodo()
+                    }}
                 />
             </li>
         )

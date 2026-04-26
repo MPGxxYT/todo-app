@@ -10,7 +10,7 @@
   --color-bg: #DC9B9B;
   --color-fg: #040911;
   --color-surface: #E5EEE4;
-  --color-border: #dbbdbd;
+  --color-border: #dbb1b1;
   --color-light: #f7f7f7;
   --color-lighter: #e3afaf;
 
@@ -27,6 +27,7 @@
   --leading-tight: 1.2;
   --weight-heading: 800;
   --weight-body: 600;
+  --weight-light: 400;
   --text-xs: 10.24px;
   --text-sm: 12.8px;
   --text-base: 16px;
@@ -64,6 +65,12 @@ body p, button{
   font-family: var(--font-body);
   font-size: var(--text-base);
   font-weight: var(--weight-body);
+}
+
+body input{
+  font-family: var(--font-body);
+  font-size: var(--text-base);
+  font-weight: var(--weight-light);
 }
 
 p {
@@ -121,7 +128,7 @@ p {
 }
 
 .filter-buttons button {
-  margin: 0px 1px;
+  margin: 0px 1px; /** Spacing between buttons **/
   padding: var(--space-2) 0px;
   background-color: var(--color-light);
   min-width: 100px;
@@ -140,7 +147,7 @@ p {
   margin-right: 0;
 }
 
-.filter-buttons button:hover {
+.filter-buttons button:not(.selected-filter):hover {
   background-color: var(--color-accent);
 }
 
@@ -157,9 +164,10 @@ p {
 
 .input-section input {
   flex: 1;
+  padding: var(--space-3) var(--space-3);
+
   border: var(--border-thin) solid var(--color-border);
   border-radius: var(--radius-md);
-  padding: var(--space-3);
   background-color: var(--color-light);
 }
 
@@ -205,8 +213,11 @@ main ul {
 }
 
 .todo-objects li button{
-  flex: 0.05;
-  margin: var(--space-4);
+  margin: var(--space-3);
+  min-width: 5vw;
+  min-height: 1.5rem;
+
+  font-size: var(--font-heading);
 
   border-radius: var(--radius-md);
   border: var(--border-thin) solid --color-border;
@@ -248,19 +259,23 @@ main ul {
   background-color: var(--color-primary);
 }
 
-
 .task-active.lighter {
   background-color: var(--color-lighter);
 }
 
 .task-editing {
+  display: flex;
+  resize: none;
   flex: 1;
+  field-sizing: content;
+  height: auto;
   border: 0;
   outline: 0;
   background: transparent;
-  width: 100%;
+  margin-left: 2rem;
+  padding: var(--space-4) 0;
 }
 
-.task-editing input:focus{
+.todo-objects li textarea:focus{
   border: 0;
 }

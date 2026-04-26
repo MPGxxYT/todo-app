@@ -10,7 +10,7 @@ function sanitizeToId(string) {
 }
 
 const todoObjectsStarter = () => {
-  var parsedData = JSON.parse(window.localStorage.getItem("todoObjects"))
+  let parsedData = JSON.parse(window.localStorage.getItem("todoObjects"))
   if (parsedData != null) {
     return parsedData;
   } else {
@@ -24,22 +24,26 @@ const todoObjectsStarter = () => {
 
 function App() {
   const [todoObjects, setTodoObjects] = useState(todoObjectsStarter)
-  const [inputValue, setInputValue] = useState()
+  const [inputValue, setInputValue] = useState('')
   const [filterValue, setFilterValue] = useState("All")
-  const [editingTodo, setEditingTodo] = useState()
-  const [editingValue, setEditingValue] = useState("")
 
-  useEffect (()=> {
-    window.localStorage.setItem("todoObjects", JSON.stringify(todoObjects))
-  }, [todoObjects])
+  try {
+    useEffect (()=> {
+      window.localStorage.setItem("todoObjects", JSON.stringify(todoObjects))
+    }, [todoObjects])
+  } catch (err) {
+    console.error("Error saving todoObjects to localStorage", err.message);
+  }
 
   const renderedTodoObjects = todoObjects.filter(todoObject => {
     if (filterValue == "All") {
-      return todoObject;
+      return true;
     } else if (filterValue == "Completed" && todoObject.completed == true) {
-      return todoObject;
+      return true;
     } else if (filterValue == "Active" && todoObject.completed == false) {
-      return todoObject;
+      return true;
+    } else {
+      return false;
     }
   }).map((todoObject, index) => 
     <TodoItem 
@@ -47,25 +51,24 @@ function App() {
     todoObject={todoObject} 
     handleCompletion={handleCompletion} 
     handleDelete={handleDelete}
-    editingTodo={editingTodo}
-    setEditingTodo={setEditingTodo}
     submitEdit={submitEdit}
-    editingValue={editingValue}
-    setEditingValue={setEditingValue}
     colorDiff={index  % 2 == 0}
     />
   );
 
   function submitEdit(id, value) {
-    var updatedObjectsList = todoObjects.map(todoObject => {
+    let updatedObjectsList = todoObjects.map(todoObject => {
+      if (value == null || value.length <= 0) {return todoObject} // General null/empty/blank checks
+      if (value.match(/^\s*$/)) {return todoObject} // (if contains only whitespace)
+      let sanitizedValue = value.trim(); // Remove any leading or trailing whitespace
       if (todoObject.id == id) {
-        return { ...todoObject, text: value }
+        return { ...todoObject, text: sanitizedValue }
       } else {
         return todoObject
       }
     })
     setTodoObjects(updatedObjectsList)
-    setEditingTodo()
+    // setEditingTodo()
   }
 
   function handleDelete(key) {
@@ -75,7 +78,7 @@ function App() {
   }
 
   function handleCompletion(key) {
-    var updatedObjectsList = todoObjects.map(todoObject => {
+    let updatedObjectsList = todoObjects.map(todoObject => {
       if (todoObject.id == key) {
         return todoObject.completed ? { ...todoObject, completed: false } : { ...todoObject, completed: true }
       } else {
@@ -90,23 +93,19 @@ function App() {
   }
 
   function addTodoObject() { 
-    // General null/empty/blank checks
-    if (inputValue == null || inputValue.length <= 0) {return}
-     // (if contains only whitespace)
-    if (inputValue.match(/^\s*$/)) {return}
-
-    // Duplicate sanitizing
-    if (todoObjects.some((object) => object.text === inputValue)) {
+    if (inputValue == null || inputValue.length <= 0) {return} // General null/empty/blank checks
+    if (inputValue.match(/^\s*$/)) {return} // (if contains only whitespace)
+    let sanitizedInputValue = inputValue.trim(); // Remove any leading or trailing whitespace
+    if (todoObjects.some((object) => object.id === sanitizeToId(sanitizedInputValue))) { // Prevent duplicates (not entirely set on if this is needed)
       alert('Task already exists.')
       return
     }
 
     setTodoObjects([
       ...todoObjects,
-      {id: sanitizeToId(inputValue), text: inputValue, completed: false}
+      {id: sanitizeToId(sanitizedInputValue), text: sanitizedInputValue, completed: false}
     ])
 
-    console.log(...todoObjects)
     setInputValue('')
   }
 
@@ -115,7 +114,7 @@ function App() {
       return false;
     }
     setFilterValue(stateString)
-    setEditingTodo()
+    // setEditingTodo()
   }
 
   function getTodosLeftCount() {
@@ -126,7 +125,6 @@ function App() {
   }
 
   function getPlaceholderText() {
-    console.log(renderedTodoObjects.length)
     if (renderedTodoObjects.length > 0) {
       return '';
     }
